@@ -2,19 +2,24 @@ from django.shortcuts import render
 from django.http import JsonResponse, request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import PostSerializer
-from .models import Post
+from .serializers import PostSerializer, CommentSerializer
+from .models import Post, Comment
 
 
 @api_view(['GET'])
 def apiOverview(request):
   
   api_urls = {
-    'List': '/news-list/',
-    'Detail New': '/detail-new',
-    'Create': '/news-create/',
-    'Update': '/news-update/<str:pk>/',
-    'Delete': '/news-delete/<str:pk>/',
+    'List of News': '/news-list/',
+    'Detail New': '/detail-new/<str:pk>/',
+    'Create New': '/news-create/',
+    'Update New': '/news-update/<str:pk>/',
+    'Delete New': '/news-delete/<str:pk>/',
+    'List of Comments': '/news-comments/',
+    'Detail Comment': '/detail-comment/<str:pk>',
+    'Create Comment': '/comment-create/',
+    'Update Comment': '/comment-update/<str:pk>',
+    'Delete Comment': '/comment-delete/<str:pk>'
 
   }
 
@@ -56,3 +61,19 @@ def newDelete(request, pk):
   post.delete()
 
   return Response("New successfully delete")
+
+
+@api_view(['GET'])
+def commentList(request):
+  comment = Comment.objects.all()
+  serializer = CommentSerializer(comment, many=True)
+
+  return Response(serializer.data)
+
+@api_view(['POST'])
+def commentCreate(request):
+  serializer = CommentSerializer(data=request.data)
+
+  if serializer.is_valid():
+    serializer.save()
+  return Response(serializer.data)
