@@ -34,7 +34,7 @@ def newList(request):
 @api_view(['GET'])
 def newDetail(request, pk):
   posts = Post.objects.get(id=pk)
-  serializer = PostSerializer(posts, many=False)
+  serializer = PostSerializer(instance=posts, many=False)
   return Response(serializer.data)
 
 @api_view(['POST'])
@@ -66,7 +66,7 @@ def newDelete(request, pk):
 @api_view(['GET'])
 def commentList(request):
   comment = Comment.objects.all()
-  serializer = CommentSerializer(comment, many=True)
+  serializer = CommentSerializer(instance=comment, many=True)
 
   return Response(serializer.data)
 
@@ -77,3 +77,20 @@ def commentCreate(request):
   if serializer.is_valid():
     serializer.save()
   return Response(serializer.data)
+
+@api_view(['POST'])
+def commentUpdate(request, pk):
+  comment = Comment.objects.get(id=pk)
+  serializer = CommentSerializer(instance=comment, data=request.data)
+
+  if serializer.is_valid():
+    serializer.save()
+
+  return Response(serializer.data)
+
+@api_view(['DELETE'])
+def commentDelete(request, pk):
+  comment = Comment.objects.get(id=pk)
+  comment.delete()
+
+  return Response('Comment successufully was deleted')
