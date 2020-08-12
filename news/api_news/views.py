@@ -6,91 +6,97 @@ from .serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def apiOverview(request):
-  
-  api_urls = {
-    'List of News': '/news-list/',
-    'Detail New': '/detail-new/<str:pk>/',
-    'Create New': '/news-create/',
-    'Update New': '/news-update/<str:pk>/',
-    'Delete New': '/news-delete/<str:pk>/',
-    'List of Comments': '/news-comments/',
-    'Detail Comment': '/detail-comment/<str:pk>',
-    'Create Comment': '/comment-create/',
-    'Update Comment': '/comment-update/<str:pk>',
-    'Delete Comment': '/comment-delete/<str:pk>'
 
-  }
+    api_urls = {
+        "List of News": "/news-list/",
+        "Detail New": "/detail-new/<str:pk>/",
+        "Create New": "/news-create/",
+        "Update New": "/news-update/<str:pk>/",
+        "Delete New": "/news-delete/<str:pk>/",
+        "List of Comments": "/news-comments/",
+        "Create Comment": "/comment-create/",
+        "Update Comment": "/comment-update/<str:pk>",
+        "Delete Comment": "/comment-delete/<str:pk>",
+    }
 
-  return Response(api_urls)
+    return Response(api_urls)
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def newList(request):
-  posts = Post.objects.all()
-  serializer = PostSerializer(posts, many=True)
-  return Response(serializer.data)
+    posts = Post.objects.all()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def newDetail(request, pk):
-  posts = Post.objects.get(id=pk)
-  serializer = PostSerializer(instance=posts, many=False)
-  return Response(serializer.data)
+    posts = Post.objects.get(id=pk)
+    serializer = PostSerializer(instance=posts, many=False)
+    return Response(serializer.data)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def newCreate(request):
-  serializer = PostSerializer(data=request.data)
+    serializer = PostSerializer(data=request.data)
 
-  if serializer.is_valid():
-    serializer.save()
-  return Response(serializer.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def newUpdate(request, pk):
-  post = Post.objects.get(id=pk)
-  serializer = PostSerializer(instance=post, data=request.data)
+    post = Post.objects.get(id=pk)
+    serializer = PostSerializer(instance=post, data=request.data)
 
-  if serializer.is_valid():
-    serializer.save()
+    if serializer.is_valid():
+        serializer.save()
 
-  return Response(serializer.data)
+    return Response(serializer.data)
 
-@api_view(['DELETE'])
+
+@api_view(["DELETE"])
 def newDelete(request, pk):
-  post = Post.objects.get(id=pk)
-  post.delete()
+    post = Post.objects.get(id=pk)
+    post.delete()
 
-  return Response("New successfully delete")
+    return Response("New successfully delete")
 
 
-@api_view(['GET'])
+@api_view(["GET"])
 def commentList(request):
-  comment = Comment.objects.all()
-  serializer = CommentSerializer(instance=comment, many=True)
+    comment = Comment.objects.all()
+    serializer = CommentSerializer(instance=comment, many=True)
 
-  return Response(serializer.data)
+    return Response(serializer.data)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def commentCreate(request):
-  serializer = CommentSerializer(data=request.data)
+    serializer = CommentSerializer(data=request.data)
 
-  if serializer.is_valid():
-    serializer.save()
-  return Response(serializer.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def commentUpdate(request, pk):
-  comment = Comment.objects.get(id=pk)
-  serializer = CommentSerializer(instance=comment, data=request.data)
+    comment = Comment.objects.get(id=pk)
+    serializer = CommentSerializer(instance=comment, data=request.data)
 
-  if serializer.is_valid():
-    serializer.save()
+    if serializer.is_valid():
+        serializer.save()
 
-  return Response(serializer.data)
+    return Response(serializer.data)
 
-@api_view(['DELETE'])
+
+@api_view(["DELETE"])
 def commentDelete(request, pk):
-  comment = Comment.objects.get(id=pk)
-  comment.delete()
+    comment = Comment.objects.get(id=pk)
+    comment.delete()
 
-  return Response('Comment successufully was deleted')
+    return Response("Comment successufully was deleted")
